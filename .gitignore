@@ -39,10 +39,7 @@ instance/
 .AppleDouble
 .LSOverride
 
-# Frontend
-/FRONTEND/node_modules/
-/FRONTEND/.angular/
-/FRONTEND/dist/
+
 
 # Database
 *.db-journal
