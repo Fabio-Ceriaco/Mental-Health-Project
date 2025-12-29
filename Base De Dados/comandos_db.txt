@@ -1,0 +1,15 @@
+Para realiaziar migração e upgrades na base de dados estes são os comandos:
+
+na pasta raiz backEnd run:
+
+Criar migração:
+
+    alembic revision --autogenerate -m "mensagem"
+
+Aplicar migração:
+
+    alembic upgrade head
+
+Reverter última migração:
+
+    alembic downgrade -1

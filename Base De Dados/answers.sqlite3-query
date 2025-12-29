@@ -1,0 +1,11 @@
+-- database: ../backEnd/mental_health.db
+
+INSERT INTO answer_option
+(label, value) VALUES
+
+('Nunca', 0 ),
+('Raramente', 1),
+('Às vezes', 2),
+('Frequentemente', 3),
+('Sempre', 4);
+

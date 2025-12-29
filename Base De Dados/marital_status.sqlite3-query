@@ -1,0 +1,9 @@
+-- database: ../backEnd/mental_health.db
+
+INSERT INTO marital_status (status, created_at, updated_at) VALUES
+('Solteiro(a)', datetime('now'), datetime('now')),
+('Casado(a)', datetime('now'), datetime('now')),
+('União de Facto', datetime('now'), datetime('now')),
+('Divorciado(a)', datetime('now'), datetime('now')),
+('Viúvo(a)', datetime('now'), datetime('now'));
+

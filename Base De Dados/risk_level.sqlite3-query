@@ -1,0 +1,10 @@
+-- database: ../backEnd/mental_health.db
+
+INSERT INTO risk_level (name, min_percent, max_percent, severity, created_at, updated_at) VALUES
+('Sem Risco', 0, 24, 'low',  datetime('now'), datetime('now')),
+('Risco Leve', 25, 49, 'low', datetime('now'), datetime('now')),
+('Risco Moderado', 50, 69, 'medium', datetime('now'), datetime('now')),
+('Risco Elevado', 70, 84, 'high', datetime('now'), datetime('now')),
+('Risco Crítico', 85, 100, 'critical', datetime('now'), datetime('now'));
+
+

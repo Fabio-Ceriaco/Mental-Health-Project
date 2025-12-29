@@ -1,0 +1,52 @@
+-- database: ../backEnd/mental_health.db
+
+INSERT INTO assessment_questions 
+(assessmentID, questionText, weight, isActive, createdAt, updatedAt) VALUES
+(1,'Sinto-me exausto física e mentalmente no final da maioria dos dias de trabalho.',1.80,1,datetime('now'),datetime('now')),
+(1,'Sinto falta de motivação para iniciar o trabalho.',1.70,1,datetime('now'),datetime('now')),
+(1,'Tenho dificuldade em concentrar-me nas minhas tarefas.',1.60,1,datetime('now'),datetime('now')),
+(1,'Sinto-me emocionalmente esgotado pelo trabalho.',1.90,1,datetime('now'),datetime('now')),
+(1,'Sinto que o meu trabalho perdeu o significado.',1.70,1,datetime('now'),datetime('now')),
+
+(1,'Tenho dificuldades em dormir devido a preocupações com o trabalho.',1.80,1,datetime('now'),datetime('now')),
+(1,'Sinto ansiedade antes de iniciar o dia de trabalho.',1.90,1,datetime('now'),datetime('now')),
+(1,'Sinto tensão muscular frequente.',1.50,1,datetime('now'),datetime('now')),
+(1,'Sinto irritabilidade elevada no dia a dia.',1.60,1,datetime('now'),datetime('now')),
+(1,'Tenho pensamentos negativos recorrentes sobre o trabalho.',1.70,1,datetime('now'),datetime('now')),
+
+(1,'Sinto-me valorizado pela empresa.',1.30,1,datetime('now'),datetime('now')),
+(1,'Sinto que o meu esforço é reconhecido.',1.40,1,datetime('now'),datetime('now')),
+(1,'Sinto apoio por parte da minha chefia direta.',1.50,1,datetime('now'),datetime('now')),
+(1,'Recebo feedback construtivo.',1.40,1,datetime('now'),datetime('now')),
+(1,'Sinto-me respeitado no ambiente de trabalho.',1.60,1,datetime('now'),datetime('now')),
+
+(1,'Tenho dificuldade em relaxar fora do horário laboral.',1.60,1,datetime('now'),datetime('now')),
+(1,'O trabalho interfere com a minha vida pessoal.',1.80,1,datetime('now'),datetime('now')),
+(1,'Sinto que trabalho mais horas do que deveria.',1.70,1,datetime('now'),datetime('now')),
+(1,'Sinto culpa ao tirar férias ou folgas.',1.50,1,datetime('now'),datetime('now')),
+(1,'Tenho pouco tempo para mim.',1.60,1,datetime('now'),datetime('now')),
+
+(1,'Tenho alterações frequentes de humor.',1.60,1,datetime('now'),datetime('now')),
+(1,'Sinto-me desanimado durante grande parte da semana.',1.80,1,datetime('now'),datetime('now')),
+(1,'Sinto vontade de faltar ao trabalho.',1.70,1,datetime('now'),datetime('now')),
+(1,'Sinto-me mentalmente lento no trabalho.',1.60,1,datetime('now'),datetime('now')),
+(1,'Sinto que estou perto de um esgotamento.',1.90,1,datetime('now'),datetime('now')),
+
+(1,'Sinto-me confiante no desempenho das minhas funções.',1.30,1,datetime('now'),datetime('now')),
+(1,'Tenho autonomia suficiente no meu trabalho.',1.40,1,datetime('now'),datetime('now')),
+(1,'O meu trabalho permite crescimento profissional.',1.50,1,datetime('now'),datetime('now')),
+(1,'Sinto estabilidade emocional no trabalho.',1.60,1,datetime('now'),datetime('now')),
+(1,'Consigo lidar bem com o stress.',1.40,1,datetime('now'),datetime('now')),
+
+(1,'Sinto dores de cabeça frequentes.',1.60,1,datetime('now'),datetime('now')),
+(1,'Tenho problemas digestivos frequentes.',1.50,1,datetime('now'),datetime('now')),
+(1,'Tenho palpitações quando estou em stress.',1.70,1,datetime('now'),datetime('now')),
+(1,'Tenho dificuldade em manter atenção prolongada.',1.60,1,datetime('now'),datetime('now')),
+(1,'Tenho episódios frequentes de fadiga extrema.',1.80,1,datetime('now'),datetime('now')),
+
+(1,'Sinto que preciso de apoio psicológico.',2.00,1,datetime('now'),datetime('now')),
+(1,'Já considerei procurar ajuda médica por causa do trabalho.',1.90,1,datetime('now'),datetime('now')),
+(1,'Sinto que estou a desenvolver um problema psicológico.',2.00,1,datetime('now'),datetime('now')),
+(1,'Sinto dificuldade em controlar emoções no trabalho.',1.80,1,datetime('now'),datetime('now')),
+(1,'Sinto-me perto de um burnout.',2.00,1,datetime('now'),datetime('now'));
+
