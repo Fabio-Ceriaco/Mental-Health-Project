@@ -1,50 +1,48 @@
 # Mental-Health-Project
 
 
-Uma aplicação completa e profissional para avaliação, monitorização e gestão de saúde mental em ambiente corporativo, com previsões baseadas em Inteligência Artificial.
-
-
+A complete and professional application for assessing, monitoring, and managing mental health in a corporate environment, with predictions based on Artificial Intelligence.
 
 ---
 
-##  Índice
+## Index
 
-1. [Visão Geral do Projeto](#visão-geral-do-projeto)
-2. [Arquitetura Técnica](#arquitetura-técnica)
-3. [Stack Tecnológico](#stack-tecnológico)
-4. [Instalação e Configuração](#instalação-e-configuração)
-5. [Como Executar](#como-executar)
-6. [Estrutura do Projeto](#estrutura-do-projeto)
-7. [Modelo de Predição (IA)](#modelo-de-predição-ia)
-8. [Métricas de Desempenho](#métricas-de-desempenho)
+1. [Project Overview](#project-overview)
+2. [Technical Architecture](#technical-architecture)
+3. [Technology Stack](#technology-stack)
+4. [Installation and Configuration](#installation-and-configuration)
+5. [How to Run](#how-to-run)
+6. [Project Structure](#project-structure)
+7. [Prediction Model (AI)](#ai-prediction-model)
+8. [Performance Metrics](#performance-metrics)
 9. [API Endpoints](#api-endpoints)
 
+---
+
+## Project Overview
+
+The **Mental Health Application** is an integrated corporate solution that enables:
+
+- **Mental Health Assessment**: Comprehensive questionnaires covering 18 psychological dimensions
+- **Real-Time Monitoring**: Assessment history and user progress
+- **Risk Predictions (AI)**: Machine learning model that predicts risk levels with 97.41% accuracy
+- **Intervention Management**: Planning and execution of improvement actions
+- **Executive Dashboard**: Real-time visualizations for HR and psychologists
+- **Security**: JWT authentication, role-based control (RBAC)
+
+### Target Audiences
+
+- **Employees**: Self-assessment and personal monitoring
+- **HR Managers**: Employee management and interventions
+
+- **Psychologists**: Detailed analysis and action planning
+- **Administrators**: System management and configurations
 
 ---
 
-## Visão Geral do Projeto
+## Technical Architecture
 
-A **Aplicação de Saúde Mental** é uma solução corporativa integrada que permite:
-
-- **Avaliação de Saúde Mental**: Questionários abrangentes com 18 dimensões psicológicas
-- **Monitorização em Tempo Real**: Histórico de avaliações e progressão do utilizador
-- **Predições de Risco (IA)**: Modelo de machine learning que prevê níveis de risco com 97.41% de precisão
-- **Gestão de Intervenções**: Planeamento e execução de ações de melhoria
-- **Dashboard Executivo**: Visualizações em tempo real para RH e psicólogos
-- **Segurança**: Autenticação JWT, controlo baseado em funções (RBAC)
-
-### Públicos-Alvo
-
--  **Colaboradores**: Auto-avaliação e monitorização pessoal
--  **Gestores de RH**: Gestão de colaboradores e intervenções
--  **Psicólogos**: Análise detalhada e planeamento de ações
--  **Administradores**: Gestão do sistema e configurações
-
----
-
-##  Arquitetura Técnica
-
-### Diagrama de Arquitetura
+### Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -73,14 +71,14 @@ A **Aplicação de Saúde Mental** é uma solução corporativa integrada que pe
                     └──────────────┘
 ```
 
-### Fluxo de Dados
+### Data Flow
 
-1. **Autenticação**: Utilizador faz login
-2. **Avaliação**: Completa questionário com 18 dimensões
-3. **Processamento**: Dados validados e armazenados
-4. **Predição IA**: Modelo prevê nível de risco
-5. **Visualização**: Dashboard mostra resultados
-6. **Intervenção**: RH/Psicólogo planeia ações
+1. **Authentication**: User logs in
+2. **Assessment**: Completes questionnaire with 18 dimensions
+3. **Processing**: Data validated and stored
+4. **AI Prediction**: Model predicts risk level
+5. **Visualization**: Dashboard shows results
+6. **Intervention**: HR/Psychologist plans actions
 
 ---
 
@@ -88,88 +86,89 @@ A **Aplicação de Saúde Mental** é uma solução corporativa integrada que pe
 
 ### Backend
 
-| Componente | Tecnologia | Versão | Propósito |
+Component | Technology | Version | Purpose |
 |-----------|-----------|--------|----------|
-| **Framework Web** | FastAPI | 0.122.0 | API REST moderna e rápida |
-| **Servidor WSGI** | Uvicorn | 0.38.0 | Servidor HTTP assíncrono |
-| **ORM** | SQLAlchemy | 2.0.44 | Mapeamento objeto-relacional |
-| **Migrações DB** | Alembic | 1.17.2 | Versionamento da base de dados |
-| **Validação** | Pydantic | 2.12.5 | Validação de schemas |
-| **Autenticação** | python-jose | 3.5.0 | JWT tokens |
-| **Criptografia** | bcrypt | 5.0.0 | Hashing de passwords |
-| **ML** | scikit-learn | 1.7.2 | Modelos de machine learning |
-| **Dados** | pandas | 2.3.3 | Análise e manipulação de dados |
-| **Numérica** | numpy | 2.3.5 | Computação numérica |
-| **Ambiente** | python-dotenv | 1.2.1 | Variáveis de ambiente |
+| **Web Framework** | FastAPI | 0.122.0 | Modern and fast REST API |
+| **WSGI Server** | Uvicorn | 0.38.0 | Asynchronous HTTP Server |
+| **ORM** | SQLAlchemy | 2.0.44 | Object-relational mapping |
+| **DB Migrations** | Alembic | 1.17.2 | Database versioning |
+| **Validation** | Pydantic | 2.12.5 | Schema validation |
+| **Authentication** | python-jose | 3.5.0 | JWT tokens |
+| **Cryptography** | bcrypt | 5.0.0 | Password hashing |
+| **ML** | scikit-learn | 1.7.2 | Machine learning models |
+| **Data** | pandas | 2.3.3 | Data Analysis and Manipulation |
+| **Numerical** | numpy | 2.3.5 | Numerical Computing |
+| **Environment** | python-dotenv | 1.2.1 | Environment Variables |
 
 ### Frontend
 
-| Componente | Tecnologia | Versão | Propósito |
+Component | Technology | Version | Purpose |
 |-----------|-----------|--------|----------|
-| **Framework** | Angular | 17+ | Framework SPA reativo |
-| **Linguagem** | TypeScript | Último | Tipagem estática em JavaScript |
-| **Estilos** | Tailwind CSS | Último | Utility-first CSS framework |
-| **Gráficos** | ApexCharts | Último | Visualizações interativas |
-| **Reatividade** | RxJS | Último | Programação reativa |
-| **HTTP Client** | HttpClient | Integrado | Cliente HTTP |
+| **Framework** | Angular | 17+ | Reactive SPA Framework |
+| **Language** | TypeScript | Latest | Static typing in JavaScript |
+| **Styles** | Tailwind CSS | Latest | Utility-first CSS framework |
+| **Charts** | ApexCharts | Latest | Interactive visualizations |
+| **Reactivity** | RxJS | Latest | Reactive programming |
+| **HTTP Client** | HttpClient | Integrated | HTTP Client |
 
-### Base de Dados
+### Data Base
 
-| Aspecto | Tecnologia |
+| Appearance | Technology |
 |--------|-----------|
-| **Tipo** | SQLite (ficheiro local) |
-| **Ficheiro** | `API/mental_health.db` |
-| **Tabelas** | 20+ |
-| **Registos** | 857 colaboradores, 851 avaliações |
-| **Migrations** | Alembic com versionamento |
+| **Type** | SQLite (local file) |
+| **File** | `API/mental_health.db` |
+| **Tables** | 20+ |
+| **Records** | 857 collaborators, 851 reviews |
+| **Migrations** | Alembic with versioning |
 
 ---
 
-##  Instalação e Configuração
+## Installation and Configuration
 
-### Requisitos do Sistema
+### System Requirements
 
-- **Python**: 3.9+ (recomendado 3.11)
-- **Node.js**: 18+ (para Angular)
-- **npm**: 8+ (gestor de pacotes Node)
-- **Git**: Para controlo de versão
-- **macOS/Linux/Windows**: Sistema operativo
+- **Python**: 3.9+ (3.11 recommended)
+- **Node.js**: 18+ (for Angular)
+- **npm**: 8+ (Node package manager)
+- **Git**: For version control
+- **macOS/Linux/Windows**: Operating system
 
-### Passo 1: Clonar o Repositório
+### Step 1: Clone the Repository
 
 ```bash
-git clone <seu-repositorio>
+git clone <your-repository>
 cd Mental_Health_Final
 ```
 
-### Passo 2: Configurar Backend
+### Step 2: Configure Backend
 
-#### 2.1 Criar Ambiente Virtual Python
+#### 2.1 Create a Python Virtual Environment
 
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-# ou
-venv\Scripts\activate  # Windows
+source venv/bin/activate # macOS/Linux
+# or
+venv\Scripts\activate # Windows
 ```
 
-#### 2.2 Instalar Dependências
+#### 2.2 Install Dependencies
 
 ```bash
 cd API
 pip install -r ../requirements.txt
+
 ```
 
-#### 2.3 Configurar Variáveis de Ambiente
+#### 2.3 Configure Environment Variables
 
-Criar ficheiro `.env` na raiz da pasta `API`:
+Create a `.env` file in the root of the `API` folder:
 
 ```env
 # Database
 DATABASE_URL=sqlite:///mental_health.db
 
 # JWT Authentication
-JWT_SECRET_KEY=sua_chave_secreta_super_segura_aqui_123456789
+JWT_SECRET_KEY=your_super_secure_secret_key_here_123456789
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 
@@ -177,56 +176,59 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 API_PORT=8000
 API_HOST=0.0.0.0
 
-# Ambiente
+# Environment
 ENVIRONMENT=development
 ```
 
-⚠️ **IMPORTANTE**: Alterar `JWT_SECRET_KEY` para uma chave única e segura em produção!
+⚠️ **IMPORTANT**: Change `JWT_SECRET_KEY` to a unique and secure key in production!
 
-#### 2.4 Inicializar Base de Dados (Opcional)
+#### 2.4 Initialize Database (Optional)
 
-Se a base de dados não existir:
+If the database does not exist:
 
 ```bash
 python -m alembic upgrade head
+
 ```
 
-### Passo 3: Configurar Frontend
+### Step 3: Configure Frontend
 
-#### 3.1 Instalar Dependências Node
+#### 3.1 Install Node Dependencies
 
 ```bash
 cd FRONTEND
 npm install
+
 ```
 
-#### 3.2 Configurar Proxy (Já Incluído)
+#### 3.2 Configure Proxy (Already Included)
 
-Ficheiro `FRONTEND/proxy.conf.json` já está configurado para:
-- Redirecionar `http://localhost:4200/api/*` para `http://localhost:8000`
+The file `FRONTEND/proxy.conf.json` is already configured to:
+
+- Redirect `http://localhost:4200/api/*` to `http://localhost:8000`
 
 ---
 
-## 🚀 Como Executar
+## 🚀How to Run
 
-### Opção 1: Execução Manual (Recomendado para Desenvolvimento)
+### Option 1: Manual Execution (Recommended for Development)
 
 #### Terminal 1 - Backend
 
 ```bash
 cd /Users/fabioceriaco/Mental_Health_Final/API
 
-# Ativar ambiente virtual (se não estiver já ativo)
+# Activate virtual environment (if not already active)
 source ../venv/bin/activate
 
-# Executar servidor FastAPI
+# Run FastAPI server
 python3 run.py
 ```
 
-Será exibido:
+The following will be displayed:
 ```
-INFO:     Uvicorn running on http://0.0.0.0:8000
-INFO:     Application startup complete
+INFO: Uvicorn running on http://0.0.0.0:8000
+INFO: Application startup complete
 ```
 
 #### Terminal 2 - Frontend
@@ -234,31 +236,30 @@ INFO:     Application startup complete
 ```bash
 cd /Users/fabioceriaco/Mental_Health_Final/FRONTEND
 
-# Executar servidor Angular 
-ng serve -o
+# Run Angular server ng serve -o
 ```
 
-Será exibido:
+The following will be displayed:
 ```
 ✔ Compiled successfully.
-✔ Build successful.
-```
 
-**Aceder à Aplicação**: Abrir navegador em [http://localhost:4200](http://localhost:4200)
+✔ Build successful. **Accessing the Application**: Open your browser at [http://localhost:4200](http://localhost:4200)
 
-### Opção 2: Execução via Script (Se Disponível)
+### Option 2: Execution via Script (If Available)
 
 ```bash
 cd /Users/fabioceriaco/Mental_Health_Final
 chmod +x start.sh
 ./start.sh
+
 ```
 
-### Credenciais de Teste
+### Test Credentials
 
-Após a primeira execução, utilize credenciais de demonstração:
+After the first run, use demo credentials:
 
 - **Email**: `demo@example.com`
-- **Senha**: `12345`
+
+- **Password**: `12345`
 
 ---
