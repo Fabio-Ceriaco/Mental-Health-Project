@@ -1,0 +1,44 @@
+{
+    "/auth": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    },
+    "/employee": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    },
+    "/ml": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    },
+    "/register": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    },
+    "/rh": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    },
+    "/psychologist": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {}
+    }
+}

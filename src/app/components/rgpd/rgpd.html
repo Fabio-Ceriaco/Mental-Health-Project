@@ -1,0 +1,31 @@
+<main class="fixed inset-0 bg-black/25 bg-opacity-40 flex flex-row  justify-center items-center z-50">
+  <section role="form" aria-labelledby="login-title"
+    class="max-w-xl min-w-sm rounded-2xl bg-white p-8 shadow-md border border-gray-200 flex flex-col items-center">
+    <!-- Logo -->
+    <div class="flex w-75 justify-center mb-6">
+      <img src="assets/LogoMH.png" alt="Mental Health Project logo" class="h-30 w-auto shadow-md rounded-lg" />
+    </div>
+    <h2>Consentimento para o Tratamento de Dados Pessoais</h2>
+    <p>De acordo com o Regulamento Geral sobre a Proteção de Dados (RGPD – Regulamento (UE) 2016/679), informamos que os
+      dados pessoais fornecidos neste formulário serão tratados pela Mental Health Project com a finalidade de
+      gerir a sua conta de utilizador, permitir o acesso aos serviços e melhorar a experiência da plataforma.
+
+      Os seus dados poderão incluir informações como nome, email e dados relacionados ao seu perfil de utilização.
+      Garantimos que os seus dados serão armazenados de forma segura, utilizados apenas para os fins descritos e não
+      serão
+      cedidos a terceiros sem o seu consentimento expresso, exceto quando exigido por lei.
+
+      O utilizador tem o direito de aceder, retificar, eliminar ou restringir o tratamento dos seus dados, bem como de
+      retirar o consentimento a qualquer momento. Para exercer estes direitos, contacte mental_health@mentalhealth.com.
+
+      Ao criar a sua conta, declaro que li e compreendi a política de privacidade e dou o meu consentimento expresso
+      para
+      o tratamento dos meus dados pessoais de acordo com o RGPD.</p>
+    <button type="button" class="bg-green-600 mt-6 inline-block w-full text-white py-2.5 cursor-pointer rounded-lg text-sm font-semibold
+          shadow-md hover:bg-green-700 active:scale-95 active:shadow-sm
+          transition duration-150 ease-in-out" (click)="accept()">Aceito</button>
+    <button type="button" class="bg-red-600 mt-3 inline-block w-full text-white py-2.5 cursor-pointer rounded-lg text-sm font-semibold
+          shadow-md hover:bg-red-700 active:scale-95 active:shadow-sm
+          transition duration-150 ease-in-out" (click)="cancel()">Recuso</button>
+  </section>
+</main>

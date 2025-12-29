@@ -1,0 +1,85 @@
+<main class="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
+
+  <!-- Error Message -->
+  @if (loginError) {
+  <div role="alert" class="mb-6 w-full max-w-sm rounded-xl bg-yellow-500 px-4 py-3 text-center
+          text-sm font-semibold text-white shadow-lg">
+    {{ loginError }}
+  </div>
+  }
+
+
+  <!-- Login Card -->
+  <section role="form" aria-labelledby="login-title"
+    class="w-full max-w-sm rounded-2xl bg-white p-8 shadow-md border border-gray-200">
+
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+      <img src="assets/LogoMH.png" alt="Mental Health Project logo" class="h-30 w-auto shadow-md rounded-lg" />
+    </div>
+
+    <!-- Title -->
+    <h1 id="login-title" class="text-2xl font-semibold text-gray-800 text-center">
+      Bem-vindo!
+    </h1>
+
+    <p class="mt-1 text-sm text-gray-500 text-center">
+      Faça login na sua conta
+    </p>
+
+    <!-- Form -->
+    <form class="mt-6 space-y-4" novalidate (ngSubmit)="login()">
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Escreva seu email
+        </label>
+        <input type="email" name="email" placeholder="nome@exemplo.com" [(ngModel)]="email" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Escreva sua passe
+        </label>
+        <input type="password" name="password" placeholder="••••••••" [(ngModel)]="password" class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+
+      <!-- Options -->
+      <div class="flex items-center justify-between text-sm">
+
+        <label class="flex items-center gap-2 text-gray-600">
+          <input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+          <span>Lembrar mais tarde</span>
+        </label>
+
+        <a href="#" class="text-blue-600 hover:underline">
+          Redefinir passe
+        </a>
+
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="bg-[#FFCB00] mt-6 inline-block w-full text-white py-2.5 cursor-pointer rounded-lg text-sm font-semibold
+        shadow-md hover:bg-[#f1c40e] active:scale-95 active:shadow-sm
+        transition duration-150 ease-in-out">
+        Entrar
+      </button>
+      <button type="button" class="bg-[#FFCB00] mt-6 inline-block w-full text-white py-2.5 cursor-pointer rounded-lg text-sm font-semibold
+        shadow-md hover:bg-[#f1c40e] active:scale-95 active:shadow-sm
+        transition duration-150 ease-in-out" (click)="openRgpd()">
+        Registar
+      </button>
+      @if (rgpdOpened) {
+      <app-rgpd (consentGiven)="onConsentSelected($event)"></app-rgpd>
+      }
+      @if (showRegisterModal) {
+      <app-register-modal [consentGiven]="consentGiven" (closed)="closeRegister()"></app-register-modal>
+      }
+
+    </form>
+  </section>
+</main>

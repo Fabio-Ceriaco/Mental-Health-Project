@@ -1,0 +1,139 @@
+<app-header></app-header>
+<main class="w-full flex flex-col items-center bg-gray-50 min-h-screen pb-16">
+  <div class="w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Loading / Error -->
+    <div *ngIf="loading"
+      class="bg-white ring-1 ring-gray-200 rounded-xl p-6 flex items-center justify-center text-gray-600">
+      A carregar avaliações...
+    </div>
+    <div *ngIf="!loading && errorMessage" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800">
+      {{ errorMessage }}
+    </div>
+
+    <ng-container *ngIf="!loading && !errorMessage">
+
+      <!-- Hero Section -->
+      <section class="bg-white ring-1 ring-gray-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6">
+        <div>
+          <p class="text-sm font-semibold text-yellow-600">Acompanhamento</p>
+          <h1 class="text-3xl font-bold text-gray-900">Perfil do Paciente</h1>
+          <p class="text-gray-600 mt-2">Visualize e acompanhe o histórico de avaliações e dimensões de saúde mental.</p>
+        </div>
+
+        <!-- Patient Selection -->
+        <div class="space-y-3">
+          <label for="patientSelect" class="block text-sm font-semibold text-gray-700">Selecionar Paciente</label>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <input type="text"
+              class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+              placeholder="Procurar por nome ou ID" [(ngModel)]="patientSearch" (input)="onPatientSearchChange()" />
+            <select id="patientSelect"
+              class="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+              (change)="onPatientChange($event)">
+              <option *ngFor="let p of filteredPatients" [value]="p.id" [selected]="p.id === selectedPatientId">
+                {{ p.name }} (ID {{ p.id }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Patient Info Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label for="userName" class="block text-sm font-semibold text-gray-700 mb-2">Nome</label>
+            <input type="text" id="userName" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50"
+              [value]="userName" disabled />
+          </div>
+          <div>
+            <label for="userId" class="block text-sm font-semibold text-gray-700 mb-2">ID do Utilizador</label>
+            <input type="text" id="userId" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50"
+              [value]="userId" disabled />
+          </div>
+          <div>
+            <label for="estado" class="block text-sm font-semibold text-gray-700 mb-2">Estado</label>
+            <select id="estado"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+              <option *ngFor="let opt of estadoOptions" [value]="opt">{{ opt }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Consultations -->
+        <div class="space-y-3">
+          <label for="consulta" class="block text-sm font-semibold text-gray-700">Consultas Realizadas</label>
+          <select id="consulta"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+            (change)="onConsultaChange($event)">
+            <option value="">-- Selecione uma consulta --</option>
+            <option *ngFor="let consulta of consultasOptions" [value]="consulta.data">
+              {{ consulta.data }}
+            </option>
+          </select>
+          <div *ngIf="selectedAssessment" class="flex items-center gap-2">
+            <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold"
+              [ngClass]="getRiskBadgeClass(selectedAssessment.risk_level)">
+              {{ selectedAssessment.risk_level }}
+            </span>
+            <span class="text-gray-600 font-medium">{{ selectedAssessment.score_percent | number:'1.0-0' }}%</span>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="space-y-3">
+          <label for="recomendacoes" class="block text-sm font-semibold text-gray-700">Recomendações</label>
+          <textarea id="recomendacoes"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+            placeholder="Introduza recomendações ou notas..." rows="5" [(ngModel)]="recommendationText"></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
+          <button type="button"
+            class="px-6 py-2.5 text-sm font-semibold text-gray-900 bg-yellow-500 rounded-lg hover:bg-yellow-600 transition disabled:opacity-70 disabled:cursor-not-allowed"
+            (click)="registerIntervention()" [disabled]="savingIntervention">
+            Registar Intervenção
+          </button>
+        </div>
+
+        <div class="pt-2 space-y-2">
+          <div *ngIf="interventionMessage"
+            class="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            {{ interventionMessage }}
+          </div>
+          <div *ngIf="interventionError"
+            class="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            {{ interventionError }}
+          </div>
+        </div>
+      </section>
+
+      <!-- Dimensions Section -->
+      <section class="bg-white ring-1 ring-gray-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6"
+        *ngIf="selectedAssessment">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">Pontuação por Dimensão</h2>
+          <p class="text-gray-600 mt-1">Resultados detalhados da avaliação de saúde mental.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let key of getDimensionKeys()"
+            class="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-sm font-semibold text-gray-700" [attr.title]="getDimensionTooltip(key)">
+                {{ formatDimensionName(key) }}
+              </span>
+              <span class="text-sm font-bold text-gray-900">{{ getDimensionPercent(key) | number:'1.0-0' }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="h-2 rounded-full transition-all" [ngClass]="getProgressBarClass(getDimensionPercent(key))"
+                [style.width]="getDimensionPercent(key) + '%'"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </ng-container>
+  </div>
+</main>
+<app-footer></app-footer>

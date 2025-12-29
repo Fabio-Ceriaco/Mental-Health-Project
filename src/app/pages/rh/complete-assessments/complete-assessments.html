@@ -1,0 +1,157 @@
+<app-header />
+
+<main class="flex flex-col md:flex-row gap-6 p-6 bg-gray-50 min-h-screen">
+
+
+
+  <!-- Loading state -->
+  <div class="w-full" *ngIf="loading">
+    <div class="bg-white ring-1 ring-gray-200 rounded-xl p-6 text-gray-600 text-center">A carregar avaliações...</div>
+  </div>
+
+  <!-- Error state -->
+  <div class="w-full" *ngIf="!loading && errorMessage">
+    <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800">{{ errorMessage }}</div>
+  </div>
+
+  <!-- Main content -->
+  <ng-container *ngIf="!loading && !errorMessage">
+
+    <!-- Left panel -->
+    <aside class="w-full md:w-1/3 lg:w-1/4 bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col">
+
+      <!-- Search -->
+      <div class="p-4 border-b border-gray-200">
+        <input type="text" placeholder="Pesquisar por colaborador, ID ou risco..." [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <!-- Assessment list -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3 max-h-[90vh]">
+        <div class="text-xs text-gray-400 mb-2">Total: {{ filteredAssessments.length }} avaliações</div>
+        <div *ngFor="let assessment of filteredAssessments; trackBy: trackByAssessmentId"
+          (click)="selectAssessment(assessment)" class="border rounded-lg p-3 cursor-pointer transition-colors"
+          [ngClass]="{
+            'border-blue-500 bg-blue-50': selectedAssessment?.id === assessment.id,
+            'border-gray-200 hover:bg-gray-50': selectedAssessment?.id !== assessment.id
+          }">
+          <div class="text-sm font-medium text-gray-800">
+            ID: <strong>{{ assessment.id }}</strong> – {{ assessment.created_at | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+          <div class="text-xs text-gray-600 mt-1">
+            {{ assessment.employee_name }}
+          </div>
+          <div class="mt-2">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold" [ngClass]="getRiskColor(assessment.risk_level)">
+              {{ assessment.risk_level }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="filteredAssessments.length === 0" class="text-center text-gray-500 text-sm py-4">
+          Nenhuma avaliação encontrada.
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right panel -->
+    <section class="flex-1 space-y-6" *ngIf="selectedAssessment">
+
+      <!-- Header -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">{{ selectedAssessment.employee_name }}</h2>
+            <p class="text-sm text-gray-600 mt-1">Avaliação ID {{ selectedAssessment.id }} · {{
+              selectedAssessment.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-gray-900">{{ selectedAssessment.score_percent.toFixed(1) }}%</div>
+            <div class="text-xs text-gray-600 mt-1">Score: {{ selectedAssessment.score_total }} / {{
+              selectedAssessment.score_max }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scores by dimension -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <h3 class="text-base font-semibold text-gray-700">
+            Pontuação por Dimensão
+          </h3>
+          <div class="group relative">
+            <span
+              class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+            <div
+              class="absolute bottom-full left-0 mb-2 w-80 bg-gray-900 text-white text-sm rounded-lg p-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl">
+              <div class="font-semibold mb-2">Sobre as Dimensões</div>
+              <div class="text-gray-200 text-xs leading-relaxed">
+                Cada dimensão avalia aspetos diferentes do bem-estar. A percentagem mostra o nível relativo em cada área
+                (0-100%). Valores mais elevados indicam maior necessidade de intervenção.
+              </div>
+              <div class="text-gray-300 text-xs mt-3 leading-relaxed">
+                <div class="font-semibold mb-1">Dimensões avaliadas:</div>
+                <div class="grid grid-cols-2 gap-x-2 gap-y-1">
+                  <span *ngFor="let key of getDimensionKeys()">
+                    • {{ formatDimensionName(key) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div *ngFor="let key of getDimensionKeys()"
+            class="border rounded-lg p-4 text-center group relative hover:shadow-md transition-all cursor-help bg-white border-gray-200"
+            [title]="getDimensionTooltip(key)">
+            <div class="text-xs uppercase tracking-wide mb-2 font-semibold text-gray-500 truncate"
+              [title]="formatDimensionName(key)">
+              {{ formatDimensionName(key) }}
+            </div>
+            <div class="text-2xl font-bold text-gray-900">{{ getDimensionScore(key).toFixed(1) }}%</div>
+
+            <!-- Tooltip on hover -->
+            <div
+              class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-56 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-xl">
+              <div class="font-semibold mb-1">{{ formatDimensionName(key) }}</div>
+              <div class="text-gray-300">{{ getDimensionTooltip(key) }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="getDimensionKeys().length === 0" class="text-center text-gray-500 text-sm py-4">
+          Sem dimensões registadas.
+        </div>
+      </div>
+
+      <!-- Risk classification -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <h3 class="text-base font-semibold text-gray-700 mb-4">
+          Classificação de Risco
+        </h3>
+
+        <div class="flex items-center gap-4">
+          <span class="px-4 py-2 rounded-lg text-sm font-semibold"
+            [ngClass]="getRiskColor(selectedAssessment.risk_level)">
+            {{ selectedAssessment.risk_level }}
+          </span>
+          <p class="text-sm text-gray-600">
+            Score total: <strong>{{ selectedAssessment.score_percent.toFixed(1) }}%</strong>
+          </p>
+        </div>
+
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg text-sm text-gray-700">
+          Esta avaliação reflete o estado de bem-estar do colaborador com base nas suas respostas.
+          Níveis mais elevados requerem atenção e possíveis intervenções.
+        </div>
+      </div>
+
+    </section>
+
+  </ng-container>
+
+</main>
+<app-footer />
