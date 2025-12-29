@@ -1,0 +1,61 @@
+@if (showModal) {
+<main class="fixed inset-0 bg-black/25 bg-opacity-40 flex flex-col justify-center items-center z-50">
+  <!-- Error Message -->
+  @if (registerError) {
+  <div role="alert"
+    class="mb-6 w-full max-w-sm rounded-xl bg-yellow-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg">
+    {{ registerError }}
+  </div>
+  }@else if(registerSuccess) {
+  <div role="alert"
+    class="mb-6 w-full max-w-sm rounded-xl bg-yellow-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg">
+    {{ registerSuccess }}
+  </div>
+  }
+
+  <!-- Login Card -->
+  <section role="form" aria-labelledby="login-title"
+    class="w-full max-w-sm rounded-2xl bg-white p-8 shadow-md border border-gray-200">
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+      <img src="assets/LogoMH.png" alt="Mental Health Project logo" class="h-30 w-auto shadow-md rounded-lg" />
+    </div>
+
+    <!-- Title -->
+    <h1 id="login-title" class="text-2xl font-semibold text-gray-800 text-center">Bem-vindo!</h1>
+
+    <p class="mt-1 text-sm text-gray-500 text-center">Faça um novo registo como utilizador!</p>
+
+    <!-- Form -->
+    <form class="mt-6 space-y-4" novalidate (ngSubmit)="submit()">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"> Escreva seu email </label>
+        <input type="email" name="email" placeholder="nome@exemplo.com" [(ngModel)]="form.email"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"> Escreva sua passe </label>
+        <input type="password" name="password" placeholder="••••••••" [(ngModel)]="form.password"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <!-- Confirm Password -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1"> Confirme sua passe </label>
+        <input type="password" name="password" placeholder="••••••••" [(ngModel)]="form.confirmPassword"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+
+      <!-- Submit -->
+      <div class="flex justify-end gap-2 mt-6">
+        <button (click)="close()"
+          class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">Cancelar</button>
+        <button (click)="submit()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          {{ saving ? 'A registar…' : 'Registar' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
+}

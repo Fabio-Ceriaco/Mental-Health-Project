@@ -1,0 +1,274 @@
+<app-header />
+<main class="p-6 bg-gray-50 min-h-screen grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
+
+  <div class="md:col-span-2" *ngIf="loading">
+    <div class="bg-white ring-1 ring-gray-200 rounded-xl p-6 text-gray-600 text-center">A carregar alertas...</div>
+  </div>
+  <div class="md:col-span-2" *ngIf="!loading && errorMessage">
+    <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800">{{ errorMessage }}</div>
+  </div>
+
+  <!-- Seed alerts from historical assessments -->
+  <section class="md:col-span-2 bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-5 flex flex-col gap-3">
+    <div class="flex flex-col gap-1">
+      <p class="text-xs uppercase tracking-wide text-blue-600">Gerar dados históricos</p>
+      <h2 class="text-lg font-bold text-gray-900">Popular alertas a partir das avaliações já existentes</h2>
+      <p class="text-sm text-gray-600">Executa o modelo de risco sobre todas as avaliações gravadas e cria alertas e
+        tipos padrão, útil para seed inicial da base.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <button
+        class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-sm hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-600"
+        (click)="runSeed()" [disabled]="loading || seeding">
+        {{ seeding ? 'A gerar...' : 'Gerar alertas históricos' }}
+      </button>
+      <div class="text-sm text-gray-700" *ngIf="seedMessage">
+        {{ seedMessage }}
+        <span *ngIf="seedDetails?.generated !== undefined" class="text-gray-500">(processados {{
+          seedDetails?.employees_processed || 0 }})</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Alerts -->
+  <section class="md:col-span-2 bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-6" *ngIf="!loading">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-yellow-600">Alertas recentes</p>
+          <h2 class="text-lg font-bold text-gray-900">Últimos alertas gerados</h2>
+        </div>
+        <div class="group relative">
+          <span
+            class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+          <div
+            class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-72 bg-gray-800 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+            Lista cronológica dos alertas mais recentes gerados pelo sistema. Cada alerta representa uma situação que
+            requer atenção: apoio psicológico, coaching, formação ou investigação de assédio. O nível de severidade
+            indica a urgência da intervenção.
+          </div>
+        </div>
+      </div>
+      <div class="text-sm text-gray-600">Total: <span class="font-semibold">{{ recentAlerts.length }}</span></div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-600">
+          <tr>
+            <th class="px-3 py-2 text-left">Tipo</th>
+            <th class="px-3 py-2 text-left">Mensagem</th>
+            <th class="px-3 py-2 text-left">Colaborador</th>
+            <th class="px-3 py-2 text-left">Departamento</th>
+            <th class="px-3 py-2 text-left">Severidade</th>
+            <th class="px-3 py-2 text-left">Data</th>
+            <th class="px-3 py-2 text-left">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr *ngFor="let alert of recentAlerts">
+            <td class="px-3 py-2 font-semibold text-gray-900">{{ alert.type }}</td>
+            <td class="px-3 py-2 text-gray-700">{{ alert.message }}</td>
+            <td class="px-3 py-2 text-gray-700">{{ alert.employee || '—' }}</td>
+            <td class="px-3 py-2 text-gray-700">{{ alert.department || '—' }}</td>
+            <td class="px-3 py-2">
+              <span class="px-2 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+                  'bg-red-100 text-red-800': alert.severity_level >= 4,
+                  'bg-orange-100 text-orange-800': alert.severity_level === 3,
+                  'bg-yellow-100 text-yellow-800': alert.severity_level === 2,
+                  'bg-green-100 text-green-800': alert.severity_level <= 1
+                }">
+                Nível {{ alert.severity_level || 1 }}
+              </span>
+            </td>
+            <td class="px-3 py-2 text-gray-600">{{ alert.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td class="px-3 py-2">
+              <span class="px-2 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="alert.is_resolved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
+                {{ alert.is_resolved ? 'Resolvido' : 'Pendente' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="recentAlerts.length === 0">
+            <td class="px-3 py-4 text-gray-600 text-center" colspan="7">Sem alertas gerados ainda.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Painel 1 -->
+  <section class="bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-6">
+    <div class="text-xs uppercase tracking-wide text-yellow-600 mb-2">Pedidos de apoio</div>
+
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-gray-900">Alertas de Assédio</h2>
+        <div class="group relative">
+          <span
+            class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+          <div
+            class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+            Monitorização de situações de assédio reportadas pelos colaboradores através das avaliações. Inclui casos
+            confirmados e suspeitas que requerem investigação e ação imediata por parte dos RH.
+          </div>
+        </div>
+      </div>
+      <div class="text-sm bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full border border-yellow-200">
+        Total: <span class="font-semibold">{{ getTotal(harassmentStats) }}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="border border-gray-200 rounded-lg p-4 text-center bg-gray-50" *ngFor="let c of harassmentStats">
+        <div class="text-2xl font-bold text-gray-900">
+          {{ c.count }}
+        </div>
+        <div class="text-sm text-gray-600 mt-1">
+          {{ c.label }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Painel 2 -->
+  <section class="bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-6">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs uppercase tracking-wide text-yellow-600">Pedidos de apoio</div>
+      <div class="flex items-center gap-2">
+        <select class="text-xs border border-gray-200 rounded-md px-2 py-1 bg-white"
+          (change)="onFilterChangePsych($event)">
+          <option>Todos</option>
+          <option>A Aguardar</option>
+          <option>Em Andamento</option>
+          <option>Realizados</option>
+        </select>
+        <button class="text-xs px-2 py-1 rounded-md bg-gray-100 border border-gray-200 hover:bg-gray-200"
+          (click)="toggleSortPsych()">
+          Ordenar: {{ sortDescPsych ? 'Maior' : 'Menor' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-gray-900">Psicologia</h2>
+        <div class="group relative">
+          <span
+            class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+          <div
+            class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+            Pedidos de apoio psicológico gerados automaticamente quando colaboradores apresentam níveis de risco
+            elevados em dimensões como stress, ansiedade ou depressão. Acompanha o estado de cada intervenção.
+          </div>
+        </div>
+      </div>
+      <div class="text-sm bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full border border-yellow-200">
+        Total: <span class="font-semibold">{{ getTotal(statusStats) }}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="border border-gray-200 rounded-lg p-4 text-center bg-gray-50" *ngFor="let c of statusStats">
+        <div class="text-2xl font-bold text-gray-900">{{ c.count }}</div>
+        <div class="text-sm text-gray-600 mt-1">{{ c.label }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Painel 3 -->
+  <section class="bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-6">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs uppercase tracking-wide text-gray-500">Pedidos apoio</div>
+      <div class="flex items-center gap-2">
+        <select class="text-xs border border-gray-200 rounded-md px-2 py-1 bg-white"
+          (change)="onFilterChangeCoaching($event)">
+          <option>Todos</option>
+          <option>A Aguardar</option>
+          <option>Em Andamento</option>
+          <option>Realizados</option>
+        </select>
+        <button class="text-xs px-2 py-1 rounded-md bg-gray-100 border border-gray-200 hover:bg-gray-200"
+          (click)="toggleSortCoaching()">
+          Ordenar: {{ sortDescCoaching ? 'Maior' : 'Menor' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-gray-900">
+          Coaching
+        </h2>
+        <div class="group relative">
+          <span
+            class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+          <div
+            class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+            Sessões de coaching recomendadas para colaboradores com sinais de burnout ou dificuldades de gestão
+            emocional. Ajuda no desenvolvimento de competências de resiliência e equilíbrio trabalho-vida.
+          </div>
+        </div>
+      </div>
+      <div class="text-sm bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full border border-yellow-200">
+        Total: <span class="font-semibold">{{ getTotal(statusStatsCoaching) }}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="border border-gray-200 rounded-lg p-4 text-center bg-gray-50" *ngFor="let c of statusStatsCoaching">
+        <div class="text-2xl font-bold text-gray-900">{{ c.count }}</div>
+        <div class="text-sm text-gray-600 mt-1">{{ c.label }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Painel 4 -->
+  <section class="bg-white ring-1 ring-gray-200 rounded-xl shadow-sm p-6">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs uppercase tracking-wide text-gray-500">Pedidos apoio</div>
+      <div class="flex items-center gap-2">
+        <select class="text-xs border border-gray-200 rounded-md px-2 py-1 bg-white"
+          (change)="onFilterChangeTraining($event)">
+          <option>Todos</option>
+          <option>A Aguardar</option>
+          <option>Em Andamento</option>
+          <option>Realizados</option>
+        </select>
+        <button class="text-xs px-2 py-1 rounded-md bg-gray-100 border border-gray-200 hover:bg-gray-200"
+          (click)="toggleSortTraining()">
+          Ordenar: {{ sortDescTraining ? 'Maior' : 'Menor' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-lg font-bold text-gray-900">
+          Formação em Gestão de Stress
+        </h2>
+        <div class="group relative">
+          <span
+            class="text-xs bg-gray-300 text-gray-700 rounded-full w-5 h-5 flex items-center justify-center cursor-help font-bold">?</span>
+          <div
+            class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-gray-800 text-white text-xs rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+            Formações preventivas e terapêuticas em técnicas de gestão de stress, mindfulness e bem-estar. Recomendadas
+            para colaboradores com níveis elevados de stress ou em departamentos de alto risco.
+          </div>
+        </div>
+      </div>
+      <div class="text-sm bg-yellow-50 text-yellow-800 px-3 py-1 rounded-full border border-yellow-200">
+        Total: <span class="font-semibold">{{ getTotal(statusStatsTraining) }}</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      <div class="border border-gray-200 rounded-lg p-4 text-center bg-gray-50" *ngFor="let c of statusStatsTraining">
+        <div class="text-2xl font-bold text-gray-900">{{ c.count }}</div>
+        <div class="text-sm text-gray-600 mt-1">{{ c.label }}</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<app-footer />

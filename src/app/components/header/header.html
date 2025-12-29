@@ -1,0 +1,279 @@
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+  @if (employee.role_name === 'User') {
+  <div class="w-full flex items-center justify-between px-4 lg:px-8 py-3">
+
+    <!-- Left -->
+    <div class="flex items-center gap-6 lg:gap-10">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <img [ngSrc]="logoUrl" [alt]="logoAlt" width="36" height="36" class="rounded" />
+        <div class="leading-tight">
+          <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+          <p class="text-xs text-gray-500">Employee</p>
+        </div>
+      </div>
+
+      <!-- Brand / ID -->
+      <span *ngIf=" employee" class="text-lg text-gray-600 hidden md:block">
+        ID Colaborador: {{ employee.id }}
+      </span>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-6">
+        <a routerLink="/employee-dashboard" routerLinkActive="text-yellow-600 font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }" class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Geral
+        </a>
+
+        <a routerLink="/new-evaluation" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Nova Avaliação
+        </a>
+
+        <a routerLink="/profile" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Perfil
+        </a>
+
+        <a routerLink="/helper" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Ajuda
+        </a>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="hidden md:flex items-center gap-4">
+      <span *ngIf="employee" class="text-lg text-gray-600">
+        {{ employee.name }}
+      </span>
+
+      <button (click)="logout()" class="text-lg font-medium text-red-600 hover:text-red-700 transition">
+        Sair
+      </button>
+    </div>
+
+    <!-- Mobile menu button -->
+    <button (click)="toggleMenu()"
+      class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 border border-gray-200">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div *ngIf="menuOpen" class="md:hidden px-4 pb-3 space-y-3">
+
+    <span class="flex items-center gap-3 text-gray-700 border-b border-gray-200 pb-3">
+      <img [ngSrc]="logoUrl" [alt]="logoAlt" width="32" height="32" class="rounded" />
+      <div class="leading-tight">
+        <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+        <p class="text-xs text-gray-500">Employee</p>
+      </div>
+    </span>
+
+    <span *ngIf="employee" class="block text-lg text-gray-500">
+      {{ employee.name }}
+    </span>
+
+    <a routerLink="/employee-dashboard" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Geral
+    </a>
+
+    <a routerLink="/new-evaluation" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Nova Avaliação
+    </a>
+
+    <a routerLink="/profile" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Perfil
+    </a>
+
+    <a routerLink="/helper" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Ajuda
+    </a>
+
+    <button (click)="logout()" class="block text-lg font-medium text-red-600 hover:text-red-700">
+      Sair
+    </button>
+  </div>
+  }
+  @if (employee.role_name === 'Executive') {
+
+  <div class="w-full flex items-center justify-between px-4 lg:px-8 py-3 ">
+
+    <!-- Left -->
+    <div class="flex items-center gap-6 lg:gap-10">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <img [ngSrc]="logoUrl" [alt]="logoAlt" width="36" height="36" class="rounded" />
+        <div class="leading-tight">
+          <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+          <p class="text-xs text-gray-500">Executive</p>
+        </div>
+      </div>
+
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-6">
+        <a routerLink="/rh-dashboard" routerLinkActive="text-yellow-600 font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }" class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Global
+        </a>
+
+        <a routerLink="/department-metrics" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Departamentos
+        </a>
+
+        <a routerLink="/alerts-rh" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Alertas
+        </a>
+
+        <a routerLink="/ia-plans" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Planos IA
+        </a>
+        <a routerLink="/complete-assessments" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Questionários
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="hidden md:flex items-center gap-4">
+      <span *ngIf="employee" class="text-lg text-gray-600">
+        {{ employee.name }}
+      </span>
+
+      <button (click)="logout()" class="text-lg font-medium text-red-600 hover:text-red-700 transition">
+        Sair
+      </button>
+    </div>
+
+    <!-- Mobile menu button -->
+    <button (click)="toggleMenu()"
+      class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 border border-gray-200">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div *ngIf="menuOpen" class="md:hidden px-4 pb-3 space-y-3">
+
+    <span class="flex items-center gap-3 text-gray-700 border-b border-gray-200 pb-3"><img [ngSrc]="logoUrl"
+        [alt]="logoAlt" width="32" height="32" class="rounded" />
+      <div class="leading-tight">
+        <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+        <p class="text-xs text-gray-500">Executive</p>
+      </div>
+    </span>
+
+    <span *ngIf="employee" class="block text-lg text-gray-500">
+      {{ employee.name }}
+    </span>
+
+    <a routerLink="/rh-dashboard" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Global
+    </a>
+
+    <a routerLink="/department-metrics" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Departamentos
+    </a>
+    <a routerLink="/alerts-rh" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Alertas
+    </a>
+    <a routerLink="/complete-assessments" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Questionários
+    </a>
+
+    <a routerLink="/profile" (click)="closeMenu()" class="block text-lg text-gray-600 hover:text-blue-600">
+      Perfil
+    </a>
+
+
+    <button (click)="logout()" class="block text-lg font-medium text-red-600 hover:text-red-700">
+      Sair
+    </button>
+  </div>
+
+  }
+  @if (employee.role_name === 'Admin') {
+
+  <div class="w-full flex items-center justify-between px-4 lg:px-8 py-3 ">
+
+    <!-- Left -->
+    <div class="flex items-center gap-6 lg:gap-10">
+
+      <!-- Brand -->
+      <div class="flex items-center gap-3">
+        <img [ngSrc]="logoUrl" [alt]="logoAlt" width="36" height="36" class="rounded" />
+        <div class="leading-tight">
+          <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+          <p class="text-xs text-gray-500">Admin</p>
+        </div>
+      </div>
+
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-6">
+
+
+        <a routerLink="/admin" routerLinkActive="text-yellow-600 font-semibold"
+          class="text-lg text-gray-700 hover:text-yellow-600 transition">
+          Utilizadores
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="hidden md:flex items-center gap-4">
+
+      <button (click)="logout()" class="text-lg font-medium text-red-600 hover:text-red-700 transition">
+        Sair
+      </button>
+    </div>
+
+    <!-- Mobile menu button -->
+    <button (click)="toggleMenu()"
+      class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:bg-gray-100 border border-gray-200">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div *ngIf="menuOpen" class="md:hidden px-4 pb-3 space-y-3">
+
+    <span class="flex items-center gap-3 text-gray-700 border-b border-gray-200 pb-3">
+      <img [ngSrc]="logoUrl" [alt]="logoAlt" width="32" height="32" class="rounded" />
+      <div class="leading-tight">
+        <p class="text-sm font-semibold text-gray-900">Mental Health</p>
+        <p class="text-xs text-gray-500">Admin</p>
+      </div>
+    </span>
+
+
+    <a routerLink="/admin" routerLinkActive="text-yellow-600 font-semibold" (click)="closeMenu()"
+      class="block text-lg text-gray-700 hover:text-yellow-600">
+      Utilizadores
+    </a>
+
+
+    <button (click)="logout()" class="block text-lg font-medium text-red-600 hover:text-red-700">
+      Sair
+    </button>
+  </div>
+  }
+</nav>
