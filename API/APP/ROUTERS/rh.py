@@ -30,7 +30,10 @@ from APP.REPOSITORIES.assessment_repository import AssessmentRepository
 router = APIRouter(
     prefix="/rh",
     tags=["RH"],
-    dependencies=[Depends(get_current_user), Depends(require_role("Executive"))],
+    dependencies=[
+        Depends(get_current_user),
+        Depends(require_role("RH", "Psychologist")),
+    ],
 )
 
 

@@ -41,12 +41,13 @@ class DashboardRepository(BaseRepository):
 
     def get_global_risk_distribution(self):
         """Retrieve the distribution of risk levels across all employees."""
+        from APP.MODELS.risk_level import RiskLevel
 
         return (
-            self.db_session.query(
-                AssessmentResult.risk_level, func.count(AssessmentResult.id)
-            )
-            .group_by(AssessmentResult.risk_level)
+            self.db_session.query(RiskLevel.name, func.count(AssessmentResult.id))
+            .join(RiskLevel, AssessmentResult.risk_level_id == RiskLevel.id)
+            .group_by(RiskLevel.name)
+            .order_by(RiskLevel.id)
             .all()
         )
 

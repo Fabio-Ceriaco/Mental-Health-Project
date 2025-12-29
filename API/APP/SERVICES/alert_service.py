@@ -7,7 +7,6 @@ from APP.MODELS.assessmentResult import AssessmentResult
 from APP.MODELS.employeeResponse import EmployeeResponse
 from APP.MODELS.question import Question
 from APP.ml.ml_service import PredictService
-from APP.ml.dataset_builder import build_dataset
 
 
 class AlertService:
@@ -61,12 +60,7 @@ class AlertService:
         return {"created_or_existing": created}
 
     def generate_alerts_from_assessments(self) -> Dict[str, Any]:
-        # Prepare feature order once
-        X, y, _df = build_dataset(self.repo.db)
-        feature_order = X.columns.tolist() if not X.empty else []
-        if not feature_order:
-            return {"generated": 0, "reason": "No dataset available"}
-
+        """Generate alerts from ML predictions for all employees with assessments."""
         ml_service = PredictService(self.repo.db)
 
         # Collect unique employee ids that have assessments
@@ -74,9 +68,14 @@ class AlertService:
             row.employee_id
             for row in self.repo.db.query(AssessmentResult.employee_id).distinct().all()
         ]
+
+        if not emp_ids:
+            return {"generated": 0, "reason": "No employees with assessments found"}
+
         generated = 0
         skipped = 0
         harassment_generated = 0
+
         for emp_id in emp_ids:
             try:
                 emp = self.repo.db.query(Employee).filter(Employee.id == emp_id).first()
@@ -92,7 +91,8 @@ class AlertService:
                 )
                 score_percent = latest_result.score_percent if latest_result else 0.0
 
-                pred = ml_service.predict_employee(emp_id, feature_order)
+                # Use enhanced ML model for prediction
+                pred = ml_service.predict_employee(emp_id)
                 prediction = (
                     pred.get("prediction", {}) if isinstance(pred, dict) else {}
                 )

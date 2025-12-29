@@ -1,7 +1,13 @@
 from typing import List, Dict, Tuple, Any
 from dataclasses import dataclass
+from collections import defaultdict
+import json
 from APP.MODELS.question import Question
+from APP.MODELS.assessment import Assessment
+from APP.MODELS.assessmentResult import AssessmentResult
+from APP.MODELS.employeeResponse import EmployeeResponse
 from APP.REPOSITORIES.question_repository import QuestionRepository
+from sqlalchemy.orm import Session
 
 
 @dataclass  # using dataclass for simplicity
@@ -131,3 +137,106 @@ def build_question_inputs(
             )
         )
     return q_inputs
+
+
+def _get_risk_level_id(risk_label: str) -> int:
+    """Map risk label to ID"""
+    mapping = {
+        "Sem risco": 1,
+        "Risco leve": 2,
+        "Risco moderado": 3,
+        "Risco elevado": 4,
+        "Risco crítico": 5,
+    }
+    return mapping.get(risk_label, 3)
+
+
+def recalculate_all_assessments(db: Session) -> Dict[str, Any]:
+    """
+    Recalculate all existing assessments with current dimension structure.
+
+    Args:
+        db: SQLAlchemy database session
+
+    Returns:
+        Dictionary with recalculation results including counts and sample data
+    """
+    try:
+        # Get all assessments
+        assessments = db.query(Assessment).all()
+
+        # Group responses by employee
+        employee_responses_map = defaultdict(list)
+        all_responses = db.query(EmployeeResponse).all()
+
+        for resp in all_responses:
+            employee_responses_map[resp.employee_id].append(resp)
+
+        updated_count = 0
+        dimension_counts = defaultdict(int)
+
+        for employee_id, responses in employee_responses_map.items():
+            # Get all questions for these responses
+            question_inputs = []
+            for resp in responses:
+                question = (
+                    db.query(Question).filter(Question.id == resp.question_id).first()
+                )
+                if question:
+                    question_inputs.append(
+                        QuestionInput(
+                            id=question.id,
+                            weight=question.weight,
+                            dimension=question.dimension,
+                            is_inverted=question.is_inverted,
+                            answer_value=int(resp.answer_value),
+                        )
+                    )
+
+            if not question_inputs:
+                continue
+
+            # Recalculate with current dimensions
+            result_data = calculate_assessment(question_inputs)
+
+            # Count dimensions for stats
+            dimension_counts[len(result_data["per_dimension"])] += 1
+
+            # Update assessment_result table for this employee
+            assessment_result = (
+                db.query(AssessmentResult)
+                .filter(AssessmentResult.employee_id == employee_id)
+                .first()
+            )
+
+            if assessment_result:
+                assessment_result.details_json = json.dumps(result_data)
+                assessment_result.risk_level_id = _get_risk_level_id(
+                    result_data["risk_level"]
+                )
+                assessment_result.score_total = result_data["score_total"]
+                assessment_result.score_percent = result_data["score_percent"]
+                updated_count += 1
+
+        db.commit()
+
+        # Get sample assessment for verification
+        sample_data = None
+        sample = db.query(AssessmentResult).first()
+        if sample and sample.details_json:
+            sample_data = json.loads(sample.details_json)
+
+        return {
+            "success": True,
+            "total_assessments": len(assessments),
+            "total_employees": len(employee_responses_map),
+            "updated_count": updated_count,
+            "dimension_distribution": dict(dimension_counts),
+            "sample_dimensions": (
+                list(sample_data["per_dimension"].keys()) if sample_data else []
+            ),
+        }
+
+    except Exception as e:
+        db.rollback()
+        return {"success": False, "error": str(e)}

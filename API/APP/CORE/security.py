@@ -17,7 +17,8 @@ from APP.MODELS.user import User
 
 
 class UserRole(str, Enum):
-    EXECUTIVE = ("Executive",)
+    RH = ("RH",)
+    PSYCHOLOGIST = ("Psychologist",)
     ADMIN = ("Admin",)
     USER = "User"
 

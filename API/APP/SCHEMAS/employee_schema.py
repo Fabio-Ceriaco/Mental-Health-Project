@@ -11,7 +11,7 @@ class EmployeeBase(BaseModel):
     id: Optional[int]
     name: str
     email: EmailStr
-    phone_number: PTPhone
+    phone_number: str  # Changed from PTPhone to str for flexible response
     gender_id: Optional[int]
     date_of_birth: date
     zip_code: str
@@ -40,14 +40,14 @@ class EmployeeCreate(BaseModel):
         description="Employee's phone number in E164 format",
         examples=["+351912345678"],
     )
-    gender_id: GenderEnum = Field(
+    gender_id: int = Field(
         ...,
         description="ID representing the employee's gender example: 1-Masculino, 2-Feminino, 3-Nao_Binario, 4-Outro, 5-Prefiro_nao_dizer",
     )
     date_of_birth: date = Field(..., description="Employee's date of birth")
     zip_code: str = Field(..., description="Employee's ZIP code")
     location: str = Field(..., description="Employee's location")
-    marital_status_id: MaritalStatusEnum = Field(
+    marital_status_id: int = Field(
         ...,
         description="ID representing the employee's marital status example: 1-Solteiro, 2-Casado, 3-Divorciado, 4-Viuvo, 5-Outro",
     )
@@ -55,17 +55,19 @@ class EmployeeCreate(BaseModel):
         ..., ge=0, description="Number of children the employee has"
     )
     hire_date: date = Field(..., description="Employee's hire date")
-    contract_type_id: ContractTypeEnum = Field(
+    contract_type_id: int = Field(
         ...,
         description="ID representing the type of contract example: 1-Sem_Termo, 2-Termo_Certo, 3-Termo_Incerto, 4-Trabalho_Temporário, 5-Prestação_de_Serviços, 6-Estágio_Profissional, 7-Aprendizagem, 8-Regime_de_Part_Time",
     )
-    department_id: DepartmentEnum = Field(
+    department_id: int = Field(
         ...,
         description="ID representing the employee's department example: 1-Produção, 2-Qualidade, 3-Pesquisa_e_Desenvolvimento, 4-Vendas, 5-Marketing, 6-Atendimento_ao_Cliente, 7-Finanças, 8-Tecnologia_da_Informação, 9-Manutenção, 10-Logistica, 11-Recursos_Humanos, 12-Engenharia, 13-Segurança_e_Higiene, 14-Administração",
     )
-    role_id: OptionItem
-    created_at: Optional[date]
-    updated_at: Optional[date]
+    role_id: int = Field(
+        ..., description="Role ID: 0-Psychologist, 1-RH, 2-Admin, 3-User"
+    )
+    created_at: Optional[date] = None
+    updated_at: Optional[date] = None
 
     model_config = ConfigDict(from_attributes=True)
 

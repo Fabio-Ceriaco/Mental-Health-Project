@@ -1,9 +1,0 @@
--- database: ../backEnd/mental_health.db
-
-INSERT INTO gender (gender_name, created_at, updated_at) VALUES
-('Masculino',  datetime('now'), datetime('now')),
-('Feminino',   datetime('now'), datetime('now')),
-('Não Binário',datetime('now'), datetime('now')),
-('Outro',      datetime('now'), datetime('now')),
-('Prefiro não informar', datetime('now'), datetime('now'));
-

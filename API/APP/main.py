@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from APP.ROUTERS import auth, register, employee, rh, admin, ml
+from APP.ROUTERS import auth, register, employee, rh, ml, psychologist
 from fastapi.middleware.cors import CORSMiddleware
 
 # Create FastAPI instance
@@ -21,4 +21,4 @@ app.include_router(ml.router)
 app.include_router(register.router)
 app.include_router(employee.router)
 app.include_router(rh.router)
-app.include_router(admin.router)  # Admin router
+app.include_router(psychologist.router)

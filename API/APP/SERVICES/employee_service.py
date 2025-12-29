@@ -51,13 +51,14 @@ class EmployeeService:
 
         return self.repo.get_employee_by_email(email)
 
-    def get_all(self, skip: int = 0, limit: int = 100) -> list[Employee]:
+    def get_all(self, skip: int = 0, limit: int | None = None) -> list[Employee]:
         """Retrieve all employees."""
-        if not self.repo.list():
+        employees = self.repo.list(skip=skip, limit=limit)
+        if not employees:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="No employees found."
             )
-        return self.repo.list(skip=skip, limit=limit)
+        return employees
 
     def update_employee(self, employee_id: int, employee: EmployeeUpdate) -> Employee:
         """Update an existing employee's details."""

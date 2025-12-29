@@ -1,5 +1,5 @@
 # System
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, defer
 from typing import Any, Dict, List, Optional
 
 # Models
@@ -44,9 +44,11 @@ class EmployeeRepository(BaseRepository):
         employee_dict: Dict[Any, Any] = {**employee.__dict__, "role_name": role_name}
         return EmployeeBase.model_validate(employee_dict)
 
-    def list(self, skip: int = 0, limit: int = 100) -> List[Employee]:
-
-        return self.db_session.query(Employee).offset(skip).limit(limit).all()
+    def list(self, skip: int = 0, limit: int | None = None) -> List[Employee]:
+        query = self.db_session.query(Employee).offset(skip)
+        if limit is not None:
+            query = query.limit(limit)
+        return query.all()
 
     def get_employee_profile(self, employee_id: int):
 
