@@ -12,10 +12,7 @@ A complete and professional application for assessing, monitoring, and managing 
 3. [Technology Stack](#technology-stack)
 4. [Installation and Configuration](#installation-and-configuration)
 5. [How to Run](#how-to-run)
-6. [Project Structure](#project-structure)
-7. [Prediction Model (AI)](#ai-prediction-model)
-8. [Performance Metrics](#performance-metrics)
-9. [API Endpoints](#api-endpoints)
+
 
 ---
 
